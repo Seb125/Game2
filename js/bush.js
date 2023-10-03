@@ -25,7 +25,7 @@ class Bush {
     move() {
      
       if (this.isMoving) {
-        this.left -= 3.999;
+        this.left -= 1.999;
       } else {
          // Move the obstacle left
         this.left -= 1.999;

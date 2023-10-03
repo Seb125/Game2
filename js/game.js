@@ -22,8 +22,9 @@ class Game {
         this.bushes = [];
         this.isCollided = false;
         this.currentBush = 0;
-        this.jumpHeight = 20; 
-        this.gravity = 10;  
+        this.jumpHeight = 15; 
+        this.gravity = 8;  
+        this.jumpNumber = 0;
         this.counter = 0;
         this.frameIndex = 0;
         this.isMoving = false;
@@ -79,9 +80,13 @@ class Game {
     }
 
     jump() {
+
+    this.jumpNumber += 1;
+
+    if (this.jumpNumber === 2) this.counter = 0;
      this.playerJumps = true;
      
-     this.player.top -= 20;
+     this.player.top -= 5;
      
     this.isCollided = false;
      
@@ -125,6 +130,8 @@ class Game {
         this.player.top = newHeight+5;
         collisons.push(this.player.didCollide(bush));
         console.log(this.player.top)
+
+        this.jumpNumber = 0;
       } else if (bush.left < 0) {
         // Increase the score by 1
         this.score++;
@@ -169,12 +176,13 @@ class Game {
      if (this.player.top > 420) {
       this.isCollided = true;
       this.counter = 0;
+      this.jumpNumber = 0;
      }
 
 
         
-     if (Math.random() > 0.80 && this.bushes.length < 4) {
-      this.bushes.push(new Bush(this.gameScreen, Math.random()*500, Math.random()*300));
+     if (Math.random() > 0.80 && this.bushes.length < 6) {
+      this.bushes.push(new Bush(this.gameScreen, Math.random()*1000, Math.random()*300));
       
     }
 

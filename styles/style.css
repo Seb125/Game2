@@ -33,7 +33,7 @@ body {
   padding: 0px 0px;
   overflow: hidden;
   position: relative;
-  background-image: url(../images/autumn.jpg);
+  background-color:aqua;
   background-size: cover;
   /* animation: slide 10s linear infinite; */
   background-position: 0px 0px;
