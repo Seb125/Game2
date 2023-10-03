@@ -5,6 +5,7 @@ class Bush {
       this.top = 420 - y;
       this.width = 100;
       this.height = 100;
+      this.isMoving = false;
       this.element = document.createElement("img");
       this.element.src = "./images/bush.png";
       this.element.style.position = "absolute";
@@ -22,8 +23,14 @@ class Bush {
     }
   
     move() {
-      // Move the obstacle left
-      this.left -= 1.999;
+     
+      if (this.isMoving) {
+        this.left -= 3.999;
+      } else {
+         // Move the obstacle left
+        this.left -= 1.999;
+      }
+     
       // Update the obstacle's position on the screen
       this.updatePosition();
     }

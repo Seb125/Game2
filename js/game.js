@@ -26,7 +26,7 @@ class Game {
         this.gravity = 10;  
         this.counter = 0;
         this.frameIndex = 0;
-        
+        this.isMoving = false;
         this.playerJumps = false;
         this.jumpID = null;
         this.fallID = null;
@@ -174,9 +174,25 @@ class Game {
 
         
      if (Math.random() > 0.80 && this.bushes.length < 4) {
-      this.bushes.push(new Bush(this.gameScreen, Math.random()*300, Math.random()*300));
+      this.bushes.push(new Bush(this.gameScreen, Math.random()*500, Math.random()*300));
       
     }
+
+
+    // handles moving backgroung image
+    if (this.player.left > this.gameScreen.offsetWidth - this.gameScreen.offsetWidth/2) {
+        
+      this.backgroundPosition -= 2;
+      this.gameScreen.style.backgroundPosition = `${this.backgroundPosition}px 0`;
+      this.isMoving = true;
+      
+    } else {
+      this.isMoving = false;
+    }
+
+    this.bushes.forEach((bush) => {
+      bush.isMoving = this.isMoving;
+    })
       
     
     }

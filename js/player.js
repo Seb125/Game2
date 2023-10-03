@@ -37,12 +37,7 @@ class Player {
         this.left = this.gameScreen.offsetWidth - this.width - 10;
       }
 
-      // handles moving backgroung image
-      if (this.left > this.gameScreen.offsetWidth - this.gameScreen.offsetWidth/2) {
-        
-        this.backgroundPosition -= 2;
-        this.gameScreen.style.backgroundPosition = `${this.backgroundPosition}px 0`;
-      }
+      
 
   
       // handles bottom side
