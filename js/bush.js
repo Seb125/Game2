@@ -1,7 +1,7 @@
 class Bush {
     constructor(gameScreen, x, y) {
       this.gameScreen = gameScreen;
-      this.left = 100 + x; // obstacle should spawn outside the gaming screen
+      this.left = 1000 + x; // obstacle should spawn outside the gaming screen
       this.top = 420 - y;
       this.width = 100;
       this.height = 100;
@@ -15,5 +15,17 @@ class Bush {
       this.gameScreen.appendChild(this.element);
     }
   
+    updatePosition() {
+      // Update the obstacle's position based on the properties left and top
+      this.element.style.left = `${this.left}px`;
+      this.element.style.top = `${this.top}px`;
+    }
+  
+    move() {
+      // Move the obstacle left
+      this.left -= 1.999;
+      // Update the obstacle's position on the screen
+      this.updatePosition();
+    }
     
   }

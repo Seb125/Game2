@@ -45,9 +45,9 @@ class Game {
         this.gameScreen.style.display = "block";
         
         
-        for (let i = 0; i < 3; i++) {
-          this.bushes.push(new Bush(this.gameScreen, i*100+300, i*100));
-        } 
+        // for (let i = 0; i < 3; i++) {
+        //   this.bushes.push(new Bush(this.gameScreen, i*100+300, i*100));
+        // } 
        
 
       
@@ -112,8 +112,11 @@ class Game {
      let initialY = this.player.top;
 
      let collisons = [];
+     let i = 0;
      this.bushes.forEach((bush) => {
+      bush.move();
       if (this.player.didCollide(bush)) {
+       
         this.isCollided = true;
         this.playerJumps = false;
         this.counter = 0;
@@ -122,7 +125,16 @@ class Game {
         this.player.top = newHeight+5;
         collisons.push(this.player.didCollide(bush));
         console.log(this.player.top)
+      } else if (bush.left < 0) {
+        // Increase the score by 1
+        this.score++;
+        // Remove the bush from the DOM
+        bush.element.remove();
+        // Remove bush object from the array; first buch in the array
+        this.bushes.splice(i, 1);
+        
       }
+      i++;
      })
 
      //console.log(!collisons.some(condition => condition === true))
@@ -161,7 +173,10 @@ class Game {
 
 
         
-        
+     if (Math.random() > 0.80 && this.bushes.length < 4) {
+      this.bushes.push(new Bush(this.gameScreen, Math.random()*300, Math.random()*300));
+      
+    }
       
     
     }

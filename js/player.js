@@ -9,7 +9,7 @@ class Player {
       this.directionX = 0;
       this.directionY = 0;
       this.element = document.createElement("img");
-      
+      this.backgroundPosition = 0;
       this.element.src = imgSrc;
       this.element.style.position = "absolute";
       // Set up the default element's property values
@@ -36,6 +36,14 @@ class Player {
       if (this.left > this.gameScreen.offsetWidth - this.width - 10) {
         this.left = this.gameScreen.offsetWidth - this.width - 10;
       }
+
+      // handles moving backgroung image
+      if (this.left > this.gameScreen.offsetWidth - this.gameScreen.offsetWidth/2) {
+        
+        this.backgroundPosition -= 2;
+        this.gameScreen.style.backgroundPosition = `${this.backgroundPosition}px 0`;
+      }
+
   
       // handles bottom side
       if (this.top > 420) {
