@@ -2,7 +2,7 @@ class Bush {
     constructor(gameScreen, x, y) {
       this.gameScreen = gameScreen;
       this.left = 1000 + x; // obstacle should spawn outside the gaming screen
-      this.top = 420 - y;
+      this.top = 300;
       this.width = 100;
       this.height = 100;
       this.isMoving = false;
@@ -13,6 +13,7 @@ class Bush {
       this.element.style.height = `${this.height}px`;
       this.element.style.left = `${this.left}px`;
       this.element.style.top = `${this.top}px`;
+      this.element.setAttribute("class", "block");
       this.gameScreen.appendChild(this.element);
     }
   

@@ -10,7 +10,7 @@ class Game {
         this.player = new Player(
             this.gameScreen,
             200,
-            420,
+            0,
             80,
             80,
             "./images/bird.png"
@@ -46,10 +46,8 @@ class Game {
         this.gameScreen.style.display = "block";
         
         
-        // for (let i = 0; i < 3; i++) {
-        //   this.bushes.push(new Bush(this.gameScreen, i*100+300, i*100));
-        // } 
-       
+        this.bushes.push(new Bush(this.gameScreen, -900, 20));
+        this.bushes.push(new Bush(this.gameScreen, -600, 20));
 
       
         this.gameLoop();
@@ -100,7 +98,22 @@ class Game {
 
         
     
-    
+  collide(obstacle1, obstacle2) {
+    const obstacle1Rect = obstacle1.element.getBoundingClientRect();
+    const obstacle2Rect = obstacle2.element.getBoundingClientRect();
+
+    if (
+     obstacle1Rect.left < obstacle2Rect.right &&
+      obstacle1Rect.right > obstacle2Rect.left &&
+      obstacle1Rect.top < obstacle2Rect.bottom &&
+      obstacle1Rect.bottom > obstacle2Rect.top 
+      
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 
     
@@ -129,10 +142,11 @@ class Game {
         //console.log(bush.top);
         this.player.top = newHeight+5;
         collisons.push(this.player.didCollide(bush));
-        console.log(this.player.top)
+        
+        this.player.left -= 1.999;
 
         this.jumpNumber = 0;
-      } else if (bush.left < 0) {
+      } else if (bush.left + bush.width < 0) {
         // Increase the score by 1
         this.score++;
         // Remove the bush from the DOM
@@ -157,7 +171,7 @@ class Game {
         this.counter += 0.06;
       } else if (!this.playerJumps && !this.isCollided && !this.player.top <= 420){
        
-        this.player.top += 10;
+        this.player.top += 5;
       }
 
       // if (this.player.didCollide( )) // I want to terminate the jump when player collides with anyting (ground obstacle....
@@ -166,6 +180,13 @@ class Game {
         
         
        
+      if (this.player.top >= 420) {
+        
+
+        this.lives--;
+
+      }
+      
 
       // If the lives are 0, end the game
       if (this.lives <= 0) {
@@ -181,8 +202,25 @@ class Game {
 
 
         
-     if (Math.random() > 0.80 && this.bushes.length < 6) {
-      this.bushes.push(new Bush(this.gameScreen, Math.random()*1000, Math.random()*300));
+     if (Math.random() > 0.50 && this.bushes.length < 6) {
+
+      
+
+      let newBush = new Bush(this.gameScreen, Math.random()*300, 20);
+
+
+      
+      
+      if (this.bushes.length > 0) {
+        let lastBush = this.bushes[this.bushes.length - 1];
+     
+        if (!this.collide(newBush, lastBush)) this.bushes.push(newBush);
+
+      } else {
+        this.bushes.push(newBush);
+      }
+
+
       
     }
 
