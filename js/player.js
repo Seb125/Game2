@@ -40,11 +40,6 @@ class Player {
       
 
   
-      // handles bottom side
-      if (this.top > 420) {
-        this.top = 420;
-        
-      }
   
       // Update the player's car position on the screen
       this.updatePosition();

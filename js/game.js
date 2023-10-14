@@ -6,6 +6,8 @@ class Game {
         this.gameEndScreen = document.querySelector("#game-end");
         this.highScoreElement = document.querySelector('#highScore');
         this.scoreElement = document.querySelector('#score');
+        this.livesElement = document.querySelector('#lives');
+       
         this.rollingMotionElement = null;  
         this.player = new Player(
             this.gameScreen,
@@ -13,8 +15,9 @@ class Game {
             420,
             80,
             80,
-            "./images/bird.png"
+            "./images/player1.png"
           );
+        this.playerElement = document.querySelector('#ball');
         this.height = 700;
         this.width = 1000;
         this.backgroundPosition = 0;
@@ -22,8 +25,8 @@ class Game {
         this.bushes = [];
         this.isCollided = false;
         this.currentBush = 0;
-        this.jumpHeight = 15; 
-        this.gravity = 8;  
+        this.jumpHeight = 5; 
+        this.gravity = 4;  
         this.jumpNumber = 0;
         this.counter = 0;
         this.frameIndex = 0;
@@ -34,8 +37,13 @@ class Game {
         this.animationID = null;
         this.falling = false;
         this.score = 0;
-        this.lives = 30;
+        this.lives = 3;
         this.gameIsOver = false;
+        this.frameIndex = 0;
+        this.numberOfFrames = 10;
+        this.spriteWidth = 64;
+        this.spriteCounter = 0;
+
         
     }
 
@@ -83,23 +91,61 @@ class Game {
 
     this.jumpNumber += 1;
 
-    if (this.jumpNumber === 2) this.counter = 0;
-     this.playerJumps = true;
+    if (this.jumpNumber === 2){
+
+      this.counter = 0;
+      this.playerJumps = true;
+      
+      
+      this.isCollided = false;
+    } else {
+      this.player.top -= 3;
+      this.playerJumps = true;
+      
+      
+      this.isCollided = false;
+    }
      
-     this.player.top -= 5;
-     
-    this.isCollided = false;
-     
+    
      
 
      
      
   }
 
+  animateSprite() {
+    this.frameIndex = ((this.frameIndex + 1) % this.numberOfFrames);
+    
+   
+    this.playerElement.src = `./images/player${this.frameIndex}.png`;
+    
+    this.playerElement.style.width = "80px";
+    this.playerElement.style.height = "80px";
+     // Use the clip property to show only the specified width for the frame
+     
+
+    
+}
+
         
 
         
-    
+  didCollide(obstacle1, obstacle2) {
+    const playerRect = obstacle1.element.getBoundingClientRect();
+    const obstacleRect = obstacle2.element.getBoundingClientRect();
+
+    if (
+     playerRect.left < obstacleRect.right &&
+      playerRect.right > obstacleRect.left &&
+      playerRect.top < obstacleRect.bottom &&
+      playerRect.bottom > obstacleRect.top
+      
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
     
 
 
@@ -127,10 +173,10 @@ class Game {
         this.counter = 0;
         let newHeight = bush.top - 80;
         //console.log(bush.top);
-        this.player.top = newHeight+5;
+        this.player.top = newHeight+2;
         collisons.push(this.player.didCollide(bush));
         console.log(this.player.top)
-
+        this.player.left -= 1.999;
         this.jumpNumber = 0;
       } else if (bush.left < 0) {
         // Increase the score by 1
@@ -139,7 +185,7 @@ class Game {
         bush.element.remove();
         // Remove bush object from the array; first buch in the array
         this.bushes.splice(i, 1);
-        
+       
       }
       i++;
      })
@@ -148,14 +194,14 @@ class Game {
      //console.log(!(this.player.top >= 420));
      //console.log(!collisons.some(condition => condition === true) && !(this.player.top >= 420))
      //console.log(!collisons.some(condition => condition === true) && !this.player.top > 420)
-     if (!collisons.some(condition => condition === true) && !(this.player.top >= 420)) {
+     if (!collisons.some(condition => condition === true)) {
       this.isCollided = false;
   }
 
       if (this.playerJumps && !this.isCollided) {
         this.player.top = initialY - (this.jumpHeight * Math.sin((Math.PI / 2.5) * this.counter) - 0.5 * this.gravity * this.counter ** 2);
-        this.counter += 0.06;
-      } else if (!this.playerJumps && !this.isCollided && !this.player.top <= 420){
+        this.counter += 0.02;
+      } else if (!this.playerJumps && !this.isCollided){
        
         this.player.top += 10;
       }
@@ -166,6 +212,12 @@ class Game {
         
         
        
+      // handles bottom side
+      if (this.player.top > 800) {
+        this.player.top = -90;
+        //this.lives--;
+        this.livesElement.innerHTML = this.lives;
+      }
 
       // If the lives are 0, end the game
       if (this.lives <= 0) {
@@ -173,18 +225,27 @@ class Game {
       }
   
      
-     if (this.player.top > 420) {
-      this.isCollided = true;
-      this.counter = 0;
-      this.jumpNumber = 0;
-     }
+     
 
 
         
      if (Math.random() > 0.80 && this.bushes.length < 6) {
-      this.bushes.push(new Bush(this.gameScreen, Math.random()*1000, Math.random()*300));
+      
+      let overlap = false;
+      const newBush = new Bush(this.gameScreen, Math.random()*1000, Math.random()*300);
+      this.bushes.forEach((bush) => {
+
+        if (this.didCollide(bush, newBush)) overlap = true;
+
+      })
+    
+      if (this.bushes.length === 0) {
+        this.bushes.push(newBush)
+      } else if (!overlap) {
+        this.bushes.push(newBush);
       
     }
+  }
 
 
     // handles moving backgroung image
@@ -202,7 +263,8 @@ class Game {
       bush.isMoving = this.isMoving;
     })
       
-    
+    this.spriteCounter++;
+    if(this.spriteCounter%10 === 0) this.animateSprite();
     }
 
     
