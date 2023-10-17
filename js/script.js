@@ -38,14 +38,15 @@ window.onload = function () {
         // Update player's directionX and directionY based on the key pressed
         switch (key) {
           case "ArrowLeft":
-            game.player.directionX = -10;
-          
-           
+            game.player.directionX = -3;
+            game.movingRight = false;
+            game.movingLeft = true;
             break;
           case "ArrowRight":
             
-            game.player.directionX = 6;
-           
+            game.player.directionX = 3;
+            game.movingRight = true;
+            game.movingLeft = false;
            
             break;
           case " ":
@@ -78,11 +79,11 @@ window.onload = function () {
       switch (key) {
         case "ArrowLeft":
           game.player.directionX = 0;
-          
+          game.movingLeft = false;
           break;
         case "ArrowRight":
           game.player.directionX = 0;
-         
+          game.movingRight = false;
           break;
       }
     

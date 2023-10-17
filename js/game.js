@@ -37,12 +37,14 @@ class Game {
         this.animationID = null;
         this.falling = false;
         this.score = 0;
-        this.lives = 3;
+        this.lives = 10;
         this.gameIsOver = false;
         this.frameIndex = 0;
         this.numberOfFrames = 10;
         this.spriteWidth = 64;
         this.spriteCounter = 0;
+        this.movingRight = false;
+        this.movingLeft = false
 
         
     }
@@ -113,16 +115,29 @@ class Game {
      
   }
 
-  animateSprite() {
+  animateSprite(movingRight) {
+
+    if (movingRight) {
     this.frameIndex = ((this.frameIndex + 1) % this.numberOfFrames);
     
    
     this.playerElement.src = `./images/player${this.frameIndex}.png`;
-    
+    this.playerElement.style.transform = 'scaleX(1)';
     this.playerElement.style.width = "80px";
     this.playerElement.style.height = "80px";
      // Use the clip property to show only the specified width for the frame
-     
+    } else if (!movingRight) {
+
+      this.frameIndex = ((this.frameIndex + 1) % this.numberOfFrames);
+    
+   
+      this.playerElement.src = `./images/player${this.frameIndex}.png`;
+      this.playerElement.style.transform = 'scaleX(-1)';
+      this.playerElement.style.width = "80px";
+      this.playerElement.style.height = "80px";
+
+
+    }
 
     
 }
@@ -175,7 +190,7 @@ class Game {
         //console.log(bush.top);
         this.player.top = newHeight+2;
         collisons.push(this.player.didCollide(bush));
-        console.log(this.player.top)
+        
         this.player.left -= 1.999;
         this.jumpNumber = 0;
       } else if (bush.left < 0) {
@@ -215,7 +230,7 @@ class Game {
       // handles bottom side
       if (this.player.top > 800) {
         this.player.top = -90;
-        //this.lives--;
+        this.lives--;
         this.livesElement.innerHTML = this.lives;
       }
 
@@ -263,9 +278,20 @@ class Game {
       bush.isMoving = this.isMoving;
     })
       
+
+    if (this.movingRight || this.movingLeft) {
+
     this.spriteCounter++;
-    if(this.spriteCounter%10 === 0) this.animateSprite();
+
+
+    if(this.spriteCounter%10 === 0) this.animateSprite(this.movingRight);
+
+    console.log(this.movingRight)
+    } else {
+      this.frameIndex = 0;
+      this.playerElement.src = `./images/player${this.frameIndex}.png`;
     }
+  }
 
     
 
